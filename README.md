@@ -14,6 +14,8 @@
 
 This repository is meant to serve as a general template for how to set up new repository for Android. In general, setting up a new repository takes 30-60 minutes; use this repository as a way of setting up in 5 minutes, and use the following checklist to ensure that you've set up the repository correctly.
 It has additional modules and files to save your time.
+
+### Features
 - BuildSrc module (for handling dependecies at one place).
 - Core module (includes Kotlin Extensions, Base classess etc.).
 - Static tool analysis with Report generation (Ktlint, KtlintAutoFormat Detekt, Custom Detekt Lint Rules).
@@ -25,10 +27,10 @@ It has additional modules and files to save your time.
 These instructions are basic; The important part is making sure that you follow the checklist for error free setup.
 
 ### Create Repository from Github
-- [ ] Click on **Use This Template** on this repo.
-- [ ] Enter your Github Repo name.
-- [ ] Uncheck **Include All branches** option.
-- [ ] Click on **Create Repo from template** button.
+- [ ] Click on **use this template** on this repository.
+- [ ] Enter your Github repo name.
+- [ ] Uncheck **include all branches** option.
+- [ ] Click on **create repo from template** button.
 now your repo has been created.
 
 ### Clone Repo in Android Studio and set up.
@@ -36,6 +38,7 @@ now your repo has been created.
 - [ ] Go to **settings.gradle** and change **rootProject.name** as per your project name.
 - [ ] Go to App's **build.gradle** and change **applicationId** as per your project package.
 - [ ] Go to App's module **strings.xml** and change **app_name** to your app name.
+- [ ] Delete Readme.MD file.
 - [ ] [Optional] Go to **themes.xml** and refactor Base Application them's name **Theme.AndroidRepoGithubTemplate** as per your requirements.
 that's it.
 
