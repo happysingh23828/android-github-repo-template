@@ -28,5 +28,5 @@ task clean(type: Delete) {
 subprojects { subProject ->
     //this allows to run detekt or ktlint for a specific module
     // example usage: ./gradlew :data:ktlintFormat
-    apply from: "code-quality.gradle"
+    apply from: "$project.rootDir/app/code-quality.gradle"
 }
