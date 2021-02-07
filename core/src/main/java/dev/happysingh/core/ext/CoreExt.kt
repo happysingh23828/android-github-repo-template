@@ -6,59 +6,15 @@ import android.content.res.Configuration
 import android.graphics.Paint
 import android.net.Uri
 import android.provider.Settings
-import androidx.annotation.StyleRes
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dev.happysingh.core.R
-
-enum class ScreenOrientation(val value: Int) {
-    PORTRAIT(Configuration.ORIENTATION_PORTRAIT),
-    LANDSCAPE(Configuration.ORIENTATION_LANDSCAPE)
-}
-
-fun AppCompatActivity.addFragment(layoutId: Int, fragment: Fragment) {
-    this.supportFragmentManager.beginTransaction().add(layoutId, fragment).commit()
-}
-
-fun AppCompatActivity.replaceFragment(layoutId: Int, fragment: Fragment) {
-    this.supportFragmentManager.beginTransaction().replace(layoutId, fragment).commit()
-}
-
-fun AppCompatActivity.addFragmentWithBackStack(layoutId: Int, fragment: Fragment, tag: String) {
-    this.supportFragmentManager.beginTransaction().add(layoutId, fragment)
-        .addToBackStack(tag).commit()
-}
-
-fun Fragment.addFragment(layoutId: Int, fragment: Fragment) {
-    this.requireFragmentManager().beginTransaction().add(layoutId, fragment).commit()
-}
-
-fun Fragment.addChildFragment(layoutId: Int, fragment: Fragment) {
-    this.childFragmentManager.beginTransaction().add(layoutId, fragment).commit()
-}
-
-fun Fragment.addFragmentBackStack(layoutId: Int, fragment: Fragment, tag: String) {
-    this.fragmentManager?.beginTransaction()?.add(layoutId, fragment)?.addToBackStack(tag)
-        ?.commit()
-}
-
-fun Fragment.replaceFragment(layoutId: Int, fragment: Fragment) {
-    this.requireFragmentManager().beginTransaction().replace(layoutId, fragment).commit()
-}
-
-fun Fragment.replaceChildFragment(layoutId: Int, fragment: Fragment) {
-    if (isAdded) {
-        this.childFragmentManager.beginTransaction().replace(layoutId, fragment)
-            .commitAllowingStateLoss()
-    }
-}
-
-fun Fragment.replaceFragmentBackStack(layoutId: Int, fragment: Fragment, tag: String) {
-    this.requireFragmentManager().beginTransaction().replace(layoutId, fragment).addToBackStack(tag)
-        .commit()
-}
+import kotlin.math.roundToInt
 
 fun isAllValuesNull(vararg items: Int?): Boolean {
     for (item in items) {
@@ -99,14 +55,6 @@ fun Context.shareIntent(msg: String) {
     startActivity(Intent.createChooser(shareIntent, "Share to"))
 }
 
-fun Fragment.getScreenOrientation(): ScreenOrientation {
-    return when (resources.configuration.orientation) {
-        ScreenOrientation.PORTRAIT.value -> ScreenOrientation.PORTRAIT
-        ScreenOrientation.LANDSCAPE.value -> ScreenOrientation.LANDSCAPE
-        else -> ScreenOrientation.PORTRAIT
-    }
-}
-
 fun Context.openSettings() {
     val intent = Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -117,37 +65,12 @@ fun Context.openSettings() {
     startActivity(intent)
 }
 
-fun AppCompatActivity.getScreenOrientation(): ScreenOrientation {
-    return when (resources.configuration.orientation) {
-        ScreenOrientation.PORTRAIT.value -> ScreenOrientation.PORTRAIT
-        ScreenOrientation.LANDSCAPE.value -> ScreenOrientation.LANDSCAPE
-        else -> ScreenOrientation.PORTRAIT
-    }
-}
-
 inline var AppCompatTextView.strike: Boolean
     set(visible) {
         paintFlags = if (visible) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
     }
     get() = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG == Paint.STRIKE_THRU_TEXT_FLAG
-
-fun AppCompatActivity.openConfirmDialog(
-    msg: String,
-    onYesClick: () -> Unit,
-    onNoClick: () -> Unit
-) {
-    MaterialAlertDialogBuilder(this)
-        .setMessage(msg)
-        .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
-            onYesClick.invoke()
-            dialog.dismiss()
-        }
-        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
-            onNoClick.invoke()
-            dialog.dismiss()
-        }.show()
-}
 
 fun Context.openCustomizedConfirmDialog(
     msg: String,
@@ -168,32 +91,26 @@ fun Context.openCustomizedConfirmDialog(
         }.show()
 }
 
-fun Fragment.openSelectionDialog(
-    title: String,
-    arrayOfString: Array<String>,
-    onPositionSelect: (Int) -> Unit,
-    @StyleRes style: Int = 0
-) {
-
-    MaterialAlertDialogBuilder(requireContext(), style)
-        .setTitle(title)
-        .setItems(arrayOfString) { dialog, which ->
-            onPositionSelect.invoke(which)
-            dialog.dismiss()
-        }.show()
+// send alpha under from 0.0f to 1.0f.
+private const val RGB_MAX_VALUE = 255
+fun Context.getAlphaColor(@ColorRes color: Int, alpha: Float): Int {
+    return ColorUtils.setAlphaComponent(
+        ContextCompat.getColor(this, color),
+        RGB_MAX_VALUE.times(alpha).roundToInt()
+    )
 }
 
-fun AppCompatActivity.openSelectionDialog(
-    title: String,
-    arrayOfString: Array<String>,
-    onPositionSelect: (Int) -> Unit,
-    @StyleRes style: Int = 0
-) {
-
-    MaterialAlertDialogBuilder(this, style)
-        .setTitle(title)
-        .setItems(arrayOfString) { dialog, which ->
-            onPositionSelect.invoke(which)
-            dialog.dismiss()
-        }.show()
+/**
+ * This showToast fun can be called from context object
+ */
+fun Context.showToast(message: String?) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+enum class ScreenOrientation(val value: Int) {
+    PORTRAIT(Configuration.ORIENTATION_PORTRAIT),
+    LANDSCAPE(Configuration.ORIENTATION_LANDSCAPE)
+}
+
+inline val ViewGroup.children: List<View>
+    get() = (0 until childCount).map { getChildAt(it) }

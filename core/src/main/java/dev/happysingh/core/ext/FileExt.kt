@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.nio.channels.FileChannel
 
 fun File.copy(dest: File) {
@@ -20,7 +21,7 @@ fun File.copy(dest: File) {
         ic = fi.channel
         oc = fo.channel
         ic.transferTo(0, ic.size(), oc)
-    } catch (e: Exception) {
+    } catch (e: IOException) {
         e.printStackTrace()
     } finally {
         fi?.close()
@@ -73,10 +74,11 @@ fun File.deleteAll() {
     }
 }
 
+private const val ONE_MB = 1024
 fun File.toByteArray(): ByteArray {
     val bos = ByteArrayOutputStream(this.length().toInt())
     val input = FileInputStream(this)
-    val size = 1024
+    val size = ONE_MB
     val buffer = ByteArray(size)
     var len = input.read(buffer, 0, size)
     while (len != -1) {

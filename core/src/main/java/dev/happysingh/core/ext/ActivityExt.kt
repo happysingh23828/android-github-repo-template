@@ -1,17 +1,16 @@
 package dev.happysingh.core.ext
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import dev.happysingh.core.R
 
 fun AppCompatActivity.disableScreenCapture(buildType: String) {
     this.window.setFlags(
@@ -41,43 +40,11 @@ fun Activity.showInputMethod(v: EditText) =
         inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED)
     }
 
-fun Activity.clearWindowBackground() =
-    window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-fun Activity.steepStatusBar() {
-    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-}
-
-/**
- * This showToast fun can be called from fragment
- */
-fun Fragment.showToast(message: String?) {
-    Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show()
-}
-
 /**
  * This showToast fun can be called from Activity
  */
 fun AppCompatActivity.showToast(message: String?) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-/**
- * This showToast fun can be called from context object
- */
-fun Context.showToast(message: String?) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-/**
- * This showSnackBar fun can be called from fragment
- */
-fun Fragment.showSnackBar(message: String) {
-    val mParentView = requireActivity().window.decorView.rootView
-    if (mParentView != null) {
-        Snackbar.make(mParentView, message, Snackbar.LENGTH_LONG).show()
-    }
 }
 
 /**
@@ -90,9 +57,55 @@ fun AppCompatActivity.showSnackBar(message: String) {
     }
 }
 
-/**
- * This showSnackBar fun can be called from any view
- */
-fun View.showSnackBar(message: String) {
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
+fun AppCompatActivity.openSelectionDialog(
+    title: String,
+    arrayOfString: Array<String>,
+    onPositionSelect: (Int) -> Unit,
+    @StyleRes style: Int = 0
+) {
+
+    MaterialAlertDialogBuilder(this, style)
+        .setTitle(title)
+        .setItems(arrayOfString) { dialog, which ->
+            onPositionSelect.invoke(which)
+            dialog.dismiss()
+        }.show()
+}
+
+fun AppCompatActivity.openConfirmDialog(
+    msg: String,
+    onYesClick: () -> Unit,
+    onNoClick: () -> Unit
+) {
+    MaterialAlertDialogBuilder(this)
+        .setMessage(msg)
+        .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+            onYesClick.invoke()
+            dialog.dismiss()
+        }
+        .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+            onNoClick.invoke()
+            dialog.dismiss()
+        }.show()
+}
+
+fun AppCompatActivity.getScreenOrientation(): ScreenOrientation {
+    return when (resources.configuration.orientation) {
+        ScreenOrientation.PORTRAIT.value -> ScreenOrientation.PORTRAIT
+        ScreenOrientation.LANDSCAPE.value -> ScreenOrientation.LANDSCAPE
+        else -> ScreenOrientation.PORTRAIT
+    }
+}
+
+fun AppCompatActivity.addFragment(layoutId: Int, fragment: Fragment) {
+    this.supportFragmentManager.beginTransaction().add(layoutId, fragment).commit()
+}
+
+fun AppCompatActivity.replaceFragment(layoutId: Int, fragment: Fragment) {
+    this.supportFragmentManager.beginTransaction().replace(layoutId, fragment).commit()
+}
+
+fun AppCompatActivity.addFragmentWithBackStack(layoutId: Int, fragment: Fragment, tag: String) {
+    this.supportFragmentManager.beginTransaction().add(layoutId, fragment)
+        .addToBackStack(tag).commit()
 }

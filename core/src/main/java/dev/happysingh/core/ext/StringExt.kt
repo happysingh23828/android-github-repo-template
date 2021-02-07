@@ -1,17 +1,10 @@
 package dev.happysingh.core.ext
 
-import android.graphics.Color
 import android.os.Build
 import android.text.Editable
 import android.text.Html
-import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.TextPaint
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.view.View
-import androidx.appcompat.widget.AppCompatTextView
 import java.util.regex.Pattern
 
 fun String?.isValid(): Boolean {
@@ -63,38 +56,18 @@ fun String.isEmail(): Boolean {
     return this.isValid() && emailRegex.matcher(this.trimEnd().trimStart()).matches()
 }
 
+private const val MIN_LENGTH_PHONE = 7
+private const val MAX_LENGTH_PHONE = 13
 fun String.isPhoneNumber(): Boolean {
-    return this.isValid() && IntRange(7, 13).contains(this.trimEnd().trimStart().length)
+    val minLength = MIN_LENGTH_PHONE
+    val maxLength = MAX_LENGTH_PHONE
+    return this.isValid() && IntRange(minLength, maxLength).contains(this.trimEnd().trimStart().length)
 }
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 fun String.toHtmlString(): Spanned {
     return Html.fromHtml(this)
-}
-
-fun AppCompatTextView.highLightWord(word: String, onClick: () -> Unit) {
-    val ssBuilder = SpannableStringBuilder(this.text)
-    val clickAbleSpan = object : ClickableSpan() {
-        override fun onClick(widget: View) {
-            onClick.invoke()
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            ds.color = Color.parseColor("#2779c9") // you can use custom color
-            ds.isUnderlineText = false // this remove the underline
-        }
-    }
-
-    ssBuilder.setSpan(
-        clickAbleSpan,
-        text.indexOf(word),
-        text.indexOf(word) + word.length,
-        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-    )
-
-    text = ssBuilder
-    movementMethod = LinkMovementMethod.getInstance()
 }
 
 fun String?.fromHtmlToPlainText(): String? {

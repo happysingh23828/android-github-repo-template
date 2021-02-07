@@ -7,10 +7,11 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
+private const val BITMAP_QUALITY = 100
 fun Bitmap.toBase64(compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG): String {
     val result: String
     val baos = ByteArrayOutputStream()
-    compress(compressFormat, 100, baos)
+    compress(compressFormat, BITMAP_QUALITY, baos)
     baos.flush()
     baos.close()
     val bitmapBytes = baos.toByteArray()
@@ -39,13 +40,13 @@ fun Bitmap.saveFile(path: String, compressFormat: Bitmap.CompressFormat = Bitmap
         f.createNewFile()
     }
     val stream = FileOutputStream(f)
-    compress(compressFormat, 100, stream)
+    compress(compressFormat, BITMAP_QUALITY, stream)
     stream.flush()
     stream.close()
 }
 
 fun Bitmap.toByteArray(compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG): ByteArray {
     val stream = ByteArrayOutputStream()
-    compress(compressFormat, 100, stream)
+    compress(compressFormat, BITMAP_QUALITY, stream)
     return stream.toByteArray()
 }
