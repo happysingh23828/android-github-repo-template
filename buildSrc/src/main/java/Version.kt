@@ -53,7 +53,7 @@ object Version {
     const val espresso = "3.1.0"
     const val glide = "4.9.0"
     const val gson = "2.8.5"
-    const val junit = "4.10"
+    const val androidXJunit = "1.1.2"
     const val kotlin = "1.3.31"
     const val lifecycle = "1.1.1"
     const val playCore = "1.7.0"
