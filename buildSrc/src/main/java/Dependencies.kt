@@ -4,7 +4,7 @@ object Dependencies {
 
     // add your modules variables here
     object Module {
-
+        const val core = ":core"
     }
 
 

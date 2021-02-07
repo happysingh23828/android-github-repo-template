@@ -1,7 +1,7 @@
 import dependencies.Dependencies
 import dependencies.Version
 
-apply plugin: Dependencies.Plugins.ANDROID_APPLICATION
+apply plugin: Dependencies.Plugins.ANDROID_LIBRARY
 apply plugin: Dependencies.Plugins.KOTLIN_ANDROID
 apply plugin: Dependencies.Plugins.KOTLIN_ANDROID_EXTENSIONS
 apply plugin: Dependencies.Plugins.KOTLIN_KAPT
@@ -11,25 +11,12 @@ android {
     buildToolsVersion Version.buildTools
 
     defaultConfig {
-        applicationId "com.your.packagename"
         minSdkVersion Version.minSdk
         targetSdkVersion Version.targetSdk
         versionCode Version.versionCode
         versionName Version.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources true
-            debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
-        debug {
-            debuggable true
-        }
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     kotlinOptions {
@@ -44,32 +31,22 @@ android {
         enabled = true
     }
 
-    testOptions {
-        unitTests.includeAndroidResources = true
-        unitTests.returnDefaultValues = true
-    }
-
-
-    // comment out below to create customize apk name with build details.
-    /*applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def versionName = variant.versionName
-            def versionCode = variant.versionCode
-            def flavorName = variant.flavorName
-            def variantName = variant.name
-            //customize your app name by using variables
-            outputFileName = "YourAppName-$variantName-$versionCode-${versionName}.apk"
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }*/
+
+        debug {
+            debuggable true
+        }
+    }
 
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation Dependencies.Kotlin.kotlin_stdlib_jdk7
-
-    // Modules
-    implementation project(Dependencies.Module.core)
 
     //Android X
     implementation Dependencies.AndroidX.appcompat
