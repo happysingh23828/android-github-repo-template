@@ -1,45 +1,85 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-}
+import dependencies.Dependencies
+import dependencies.Version
+
+apply plugin: Dependencies.Plugins.ANDROID_APPLICATION
+apply plugin: Dependencies.Plugins.KOTLIN_ANDROID
+apply plugin: Dependencies.Plugins.KOTLIN_ANDROID_EXTENSIONS
+apply plugin: Dependencies.Plugins.KOTLIN_KAPT
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion Version.compileSdk
+    buildToolsVersion Version.buildTools
 
     defaultConfig {
-        applicationId "dev.happysingh.template"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
+        applicationId "com.your.packagename"
+        minSdkVersion Version.minSdk
+        targetSdkVersion Version.targetSdk
+        versionCode Version.versionCode
+        versionName Version.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [crashlyticsEnabled: "true"]
+        }
+
+        debug {
+            manifestPlaceholders = [crashlyticsEnabled: "false"]
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = Version.jvmTarget
     }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
+
+
+    // comment out below to create customize apk name with build details.
+    /*applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def versionName = variant.versionName
+            def versionCode = variant.versionCode
+            def flavorName = variant.flavorName
+            def variantName = variant.name
+            //customize your app name by using variables
+            outputFileName = "YourAppName-$variantName-$versionCode-${versionName}.apk"
+        }
+    }*/
+
 }
 
 dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation Dependencies.Kotlin.kotlin_stdlib_jdk7
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //Android X
+    implementation Dependencies.AndroidX.appcompat
+    implementation Dependencies.AndroidX.materialDesign
+    implementation Dependencies.AndroidX.constraintlayout
+    implementation Dependencies.AndroidX.vectordrawable
+    implementation Dependencies.AndroidX.core
+
+    //Testing
+    testImplementation Dependencies.Test.test_junit
+    androidTestImplementation Dependencies.Test.android_test_espresso_core
+
+    //LifeCycle
+    implementation Dependencies.Lifecycle.lifeCycleExtension
 }
