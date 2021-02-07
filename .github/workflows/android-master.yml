@@ -22,7 +22,7 @@ jobs:
       - name: Running detekt
         run: bash ./gradlew detekt --stacktrace
 
-  # Running Unit Test Cases
+  # Running Unit Test Cases and Checking Dependencies
   unitTest:
     needs: lint
     name: Running Unit Tests
@@ -36,3 +36,20 @@ jobs:
           java-version: 1.8
       - name: Run Unit tests
         run: bash ./gradlew test --stacktrace
+
+      - name: Download Dependencies
+        run: ./gradlew androidDependencies
+
+      - name: Check Dependency Versions
+        run: ./gradlew dependencyUpdates
+
+      - name: Install Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+      - name: Install Bundler
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: Run Danger
+        run: bundle exec danger
