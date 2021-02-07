@@ -2,13 +2,17 @@ package dev.happysingh.core.ext
 
 import android.graphics.Color
 import android.os.Build
-import android.text.*
+import android.text.Editable
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import java.util.regex.Pattern
-
 
 fun String?.isValid(): Boolean {
     return this != null && this.isNotEmpty() && this.isNotBlank()
@@ -43,10 +47,7 @@ fun String.toFormattedInt(): String {
         this.toDouble().toInt().toString()
     } else
         this.toDouble().toString()
-
-
 }
-
 
 private val emailRegex = Pattern.compile(
     "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -93,14 +94,13 @@ fun AppCompatTextView.highLightWord(word: String, onClick: () -> Unit) {
     )
 
     text = ssBuilder
-    movementMethod = LinkMovementMethod.getInstance();
+    movementMethod = LinkMovementMethod.getInstance()
 }
-
 
 fun String?.fromHtmlToPlainText(): String? {
 
     return if (this != null) {
-        val text = this.replace("\n", "<br>");
+        val text = this.replace("\n", "<br>")
         val spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT)
         } else {
@@ -114,5 +114,3 @@ fun String?.fromHtmlToPlainText(): String? {
         null
     }
 }
-
-

@@ -10,8 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
-import android.webkit.*
-import android.widget.*
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.ScrollView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -184,7 +192,6 @@ var RadioGroup.checkedIndex: Int
         }
     }
 
-
 fun AppCompatButton.disableAlpha() {
     this.isClickable = false
     this.isEnabled = false
@@ -236,12 +243,11 @@ fun WebView.doOnPageLoad(onWebPageLoad: () -> Unit) {
     }
 }
 
-
 /**
  * returns lambda if [WebView] is gets an error while loading loaded.
  */
 fun WebView.doOnPageLoadError(onError: () -> Unit) {
-    webViewClient    = object : WebViewClient() {
+    webViewClient = object : WebViewClient() {
 
         override fun onReceivedError(
             view: WebView?,
@@ -275,5 +281,3 @@ fun Context.getAlphaColor(@ColorRes color: Int, alpha: Float): Int {
         255.times(alpha).roundToInt()
     )
 }
-
-

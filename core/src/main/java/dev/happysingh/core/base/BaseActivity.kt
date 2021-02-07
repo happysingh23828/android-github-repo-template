@@ -2,6 +2,4 @@ package dev.happysingh.core.base
 
 import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
-
-}
+abstract class BaseActivity : AppCompatActivity()

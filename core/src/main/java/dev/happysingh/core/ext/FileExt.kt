@@ -6,7 +6,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
 
-
 fun File.copy(dest: File) {
     var fi: FileInputStream? = null
     var fo: FileOutputStream? = null

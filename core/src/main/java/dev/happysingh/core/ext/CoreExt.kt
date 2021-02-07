@@ -39,7 +39,6 @@ fun Fragment.addChildFragment(layoutId: Int, fragment: Fragment) {
     this.childFragmentManager.beginTransaction().add(layoutId, fragment).commit()
 }
 
-
 fun Fragment.addFragmentBackStack(layoutId: Int, fragment: Fragment, tag: String) {
     this.fragmentManager?.beginTransaction()?.add(layoutId, fragment)?.addToBackStack(tag)
         ?.commit()
@@ -56,12 +55,10 @@ fun Fragment.replaceChildFragment(layoutId: Int, fragment: Fragment) {
     }
 }
 
-
 fun Fragment.replaceFragmentBackStack(layoutId: Int, fragment: Fragment, tag: String) {
     this.requireFragmentManager().beginTransaction().replace(layoutId, fragment).addToBackStack(tag)
         .commit()
 }
-
 
 fun isAllValuesNull(vararg items: Int?): Boolean {
     for (item in items) {
@@ -90,7 +87,6 @@ fun isAllValuesNull(vararg items: Any?): Boolean {
     return false
 }
 
-
 fun Float.roundToOneDecimalPlace(): Float {
     return String.format("%.2f", this).toFloat()
 }
@@ -99,10 +95,9 @@ fun Context.shareIntent(msg: String) {
     val shareIntent = Intent()
     shareIntent.action = Intent.ACTION_SEND
     shareIntent.type = "text/plain"
-    shareIntent.putExtra(Intent.EXTRA_TEXT, msg);
+    shareIntent.putExtra(Intent.EXTRA_TEXT, msg)
     startActivity(Intent.createChooser(shareIntent, "Share to"))
 }
-
 
 fun Fragment.getScreenOrientation(): ScreenOrientation {
     return when (resources.configuration.orientation) {
@@ -177,10 +172,10 @@ fun Fragment.openSelectionDialog(
     title: String,
     arrayOfString: Array<String>,
     onPositionSelect: (Int) -> Unit,
-    @StyleRes style : Int = 0
+    @StyleRes style: Int = 0
 ) {
 
-    MaterialAlertDialogBuilder(requireContext(),style)
+    MaterialAlertDialogBuilder(requireContext(), style)
         .setTitle(title)
         .setItems(arrayOfString) { dialog, which ->
             onPositionSelect.invoke(which)
@@ -192,14 +187,13 @@ fun AppCompatActivity.openSelectionDialog(
     title: String,
     arrayOfString: Array<String>,
     onPositionSelect: (Int) -> Unit,
-    @StyleRes style : Int = 0
+    @StyleRes style: Int = 0
 ) {
 
-    MaterialAlertDialogBuilder(this,style)
+    MaterialAlertDialogBuilder(this, style)
         .setTitle(title)
         .setItems(arrayOfString) { dialog, which ->
             onPositionSelect.invoke(which)
             dialog.dismiss()
         }.show()
 }
-

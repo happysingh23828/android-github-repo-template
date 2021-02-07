@@ -49,7 +49,6 @@ fun Activity.steepStatusBar() {
     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 }
 
-
 /**
  * This showToast fun can be called from fragment
  */
