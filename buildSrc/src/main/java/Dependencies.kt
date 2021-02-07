@@ -127,7 +127,7 @@ object Dependencies {
     }
 
     object Test {
-        const val test_junit = "junit:junit:${Version.junit}"
+        const val test_junit = "androidx.test.ext:junit:${Version.androidXJunit}"
         const val android_test_espresso_core =
             "androidx.test.espresso:espresso-core:${Version.espresso}"
         const val android_test_room = "android.arch.persistence.room:testing:${Version.room}"
