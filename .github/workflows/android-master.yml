@@ -70,4 +70,4 @@ jobs:
           SLACK_MESSAGE: 'APK Generated '
           SLACK_TITLE: APK Builder
           SLACK_USERNAME: HappyBuilder
-          SLACK_WEBHOOK: https://hooks.slack.com/services/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
+          SLACK_WEBHOOK: https://hooks.slack.com/services/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
