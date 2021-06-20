@@ -12,7 +12,7 @@
 
 ## What is diffrent here from creating a new project from Android Studio?
 
-This repository is meant to serve  as a general template for how to set up new repository for Android. In general, setting up a new repository takes 30-60 minutes; use this repository as a way of setting up in 5 minutes, and use the following checklist to ensure that you've set up the repository correctly.
+This repository is meant to serve  ass a general template for how to set up new repository for Android. In general, setting up a new repository takes 30-60 minutes; use this repository as a way of setting up in 5 minutes, and use the following checklist to ensure that you've set up the repository correctly.
 It has additional modules and files to save your time.
 
 ### Features
