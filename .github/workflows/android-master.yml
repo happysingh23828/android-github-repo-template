@@ -53,11 +53,22 @@ jobs:
       - name: Grant Permission to Execute
         run: chmod +x gradlew
 
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace
+#      - name: Build debug APK
+#        run: bash ./gradlew assembleDebug --stacktrace
+#
+##      - name: Upload APK
+##        uses: actions/upload-artifact@v2-preview
+##        with:
+##          name: app
+##          path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v2-preview
-        with:
-          name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: github
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'APK Generated '
+          SLACK_TITLE: APK Builder
+          SLACK_USERNAME: HappyBuilder
+          SLACK_WEBHOOK: https://hooks.slack.com/services/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
