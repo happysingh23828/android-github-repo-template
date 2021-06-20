@@ -39,7 +39,6 @@ jobs:
 
   #Generating Apk.
   apk:
-    needs: [lint, unitTest]
     name: Generate APK
     runs-on: ubuntu-18.04
 
